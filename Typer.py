@@ -107,7 +107,7 @@ def _first_time_use():
 		pw1 = input("Please set a master password: ")
 		pw2 = input("Enter the password again: ")
 	_generate_key()
-	with open("config.txt", "a") as config:
+	with open("config.txt", "w") as config:
 		en_pw = _encrypt_message(pw1)
 		config.write(en_pw.decode() + "\n")
 	print(">>>The security and config files have been created. \n>>>Please do not alter them in any way.")
