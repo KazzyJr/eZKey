@@ -97,21 +97,35 @@ def _decrypt_message(encrypted_message):
 	return decrypted_message.decode()
 
 
+def _pw_setter() -> str:
+	"""
+	Used for asking and comparing the 2 strings given as Database password
+	"""
+	pw1 = input("Please set a master password: ")
+	if len(pw1) < 6:
+		print("Please enter at least 6 characters...")
+		_pw_setter()
+	pw2 = input("Enter the password again: ")
+	if pw1 != pw2:
+		print("Passwords do not match!")
+		_pw_setter()
+	else:
+		print("Database password set!")
+		return pw1
+
+
 def _first_time_use():
 	"""
 	Create the security file and store the encrypted master password on line 1
 	"""
-	pw1 = "1"
-	pw2 = "2"
-	while pw1 != pw2:
-		pw1 = input("Please set a master password: ")
-		pw2 = input("Enter the password again: ")
+	pw = _pw_setter()
+	pw = str(pw)
 	_generate_key()
 	with open("config.txt", "w") as config:
-		en_pw = _encrypt_message(pw1)
+		en_pw = _encrypt_message(pw)
 		config.write(en_pw.decode() + "\n")
-	print(">>>The security and config files have been created. \n>>>Please do not alter them in any way.")
-	print(">>>If altered, the saved passwords will be lost forever!")
+	print(">>> The security and config files have been created. \n>>> Please do not alter them in any way.")
+	print(">>> If altered, the saved passwords will be lost forever!")
 
 
 def _main():
