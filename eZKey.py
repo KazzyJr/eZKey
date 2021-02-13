@@ -1,12 +1,16 @@
 from cryptography.fernet import Fernet
 
+import os
+curr_path = os.path.dirname(os.path.realpath(__file__))
+config_file = os.path.join(curr_path, "config.txt")
+
 
 def _do(number: str):
 	"""
 	Prompts and executes the write
 	"""
 	import pyautogui
-	with open("config.txt", "r") as config:
+	with open(config_file, "r") as config:
 		config.readline()
 		i = 0
 		for line in config:
@@ -39,7 +43,7 @@ def _new_pw():
 	response = input("Do you want to store a new password? (y/n) ")
 	if response == "y":
 		password = input("Enter the new password: ")
-		with open("config.txt", "a") as config:
+		with open(config_file, "a") as config:
 			password = _encrypt_message(password)
 			config.write(password.decode() + "\n")
 		_new_pw()
@@ -51,7 +55,7 @@ def _pw_show():
 	"""
 	password_show = input("Do you want to see your passwords? (y/n) ")
 	if password_show == "y":
-		with open("config.txt", "r") as config:
+		with open(config_file, "r") as config:
 			config.readline()
 			i = 0
 			for line in config:
@@ -121,7 +125,7 @@ def _first_time_use():
 	pw = _pw_setter()
 	pw = str(pw)
 	_generate_key()
-	with open("config.txt", "w") as config:
+	with open(config_file, "w") as config:
 		en_pw = _encrypt_message(pw)
 		config.write(en_pw.decode() + "\n")
 	print(">>> The security and config files have been created. \n>>> Please do not alter them in any way.")
@@ -130,7 +134,7 @@ def _first_time_use():
 
 def _main():
 	c_pw = input("Please enter your master password: ")
-	with open("config.txt", "r") as config:
+	with open(config_file, "r") as config:
 		f = config.readline().strip()
 		s_pw = _decrypt_message(f.encode())
 	if c_pw != str(s_pw):  # If user fails to enter the correct master password
