@@ -106,14 +106,14 @@ def _pw_setter() -> str:
 	"""
 	Used for asking and comparing the 2 strings given as Database password
 	"""
-	pw1 = getpass.getpass("Please set a master password: ")
-	if len(pw1) < 6:
+	pw1 = ""
+	while len(pw1) < 6:
 		print("Please enter at least 6 characters...")
-		_pw_setter()
+		pw1 = getpass.getpass("Please set a master password: ")
 	pw2 = getpass.getpass("Enter the password again: ")
 	if pw1 != pw2:
 		print("Passwords do not match!")
-		_pw_setter()
+		return _pw_setter()
 	else:
 		print("Database password set!")
 		return pw1
@@ -149,8 +149,10 @@ def _main():
 if __name__ == "__main__":
 	print("Welcome to eZKey, your handy password database.")
 	import os
+	import time
 	if not os.path.exists("security.key"):
 		_first_time_use()
 	_main()
 	print("Have a safe and eZ day!\nDeveloped by KazzyJr (c) 2021")
+	time.sleep(2)
 
