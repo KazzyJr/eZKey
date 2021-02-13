@@ -1,6 +1,7 @@
 from cryptography.fernet import Fernet
-
+import getpass
 import os
+
 curr_path = os.path.dirname(os.path.realpath(__file__))
 config_file = os.path.join(curr_path, "config.txt")
 
@@ -42,7 +43,7 @@ def _new_pw():
 	"""
 	response = input("Do you want to store a new password? (y/n) ")
 	if response == "y":
-		password = input("Enter the new password: ")
+		password = getpass.getpass("Enter the new password: ")
 		with open(config_file, "a") as config:
 			password = _encrypt_message(password)
 			config.write(password.decode() + "\n")
@@ -105,11 +106,11 @@ def _pw_setter() -> str:
 	"""
 	Used for asking and comparing the 2 strings given as Database password
 	"""
-	pw1 = input("Please set a master password: ")
+	pw1 = getpass.getpass("Please set a master password: ")
 	if len(pw1) < 6:
 		print("Please enter at least 6 characters...")
 		_pw_setter()
-	pw2 = input("Enter the password again: ")
+	pw2 = getpass.getpass("Enter the password again: ")
 	if pw1 != pw2:
 		print("Passwords do not match!")
 		_pw_setter()
@@ -133,7 +134,7 @@ def _first_time_use():
 
 
 def _main():
-	c_pw = input("Please enter your master password: ")
+	c_pw = getpass.getpass("Please enter your master password: ")
 	with open(config_file, "r") as config:
 		f = config.readline().strip()
 		s_pw = _decrypt_message(f.encode())
